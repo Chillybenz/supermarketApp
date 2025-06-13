@@ -8,19 +8,23 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.supermarket.AppUtil
 import com.example.supermarket.R
+import com.example.supermarket.viewmodel.AuthViewModel
 
 @Composable
-fun SignupScreen(modifier: Modifier = Modifier) {
+fun SignupScreen(modifier: Modifier = Modifier,authViewModel: AuthViewModel = viewModel()) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-
+    var context = LocalContext.current
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -72,7 +76,14 @@ fun SignupScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = { },
+            onClick = { authViewModel.signup(email,username,password){success,errorMessage ->
+                if(success){
+
+                }else{
+                    AppUtil.showToast(context, errorMessage?:"Something went Wrong!")
+                }
+            }
+                      },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(55.dp),
